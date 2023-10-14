@@ -256,24 +256,4 @@ function onDeviceReady() {
 
     }
 
-    // Initialize the admin menu as a popup
-    $("#adminMenu").popup();
-
-    // Handle clicks on the admin button to open the menu
-    $("#adminMenuBtn").on("click", function () {
-        $("#adminMenu").popup("open", {
-            positionTo: "#adminMenuBtn",
-            transition: "pop"
-        });
-    });
-
-    // Handle the "Delete Local Data" button click
-    $("#deleteLData").on("click", function () {
-        // code to delete local data here
-        localStorage.clear();
-        dataArray = [];
-        // alert("Local data deleted!");
-        $("#adminMenu").popup("close");
-    });
-
 } //end onDeviceReady
