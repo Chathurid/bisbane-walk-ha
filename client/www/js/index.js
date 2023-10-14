@@ -5,10 +5,10 @@ function onDeviceReady() {
 
     const BASE_URL = 'http://localhost'
     const SERVER_PORT = 3000;
-
-    const CREATE_REVIEW_EP = BASE_URL + ":" + SERVER_PORT + "/review"
-    const GET_REVIEWS_EP = BASE_URL + ":" + SERVER_PORT + "/reviews"
-    const DELETE_REVIEW_EP = BASE_URL + ":" + SERVER_PORT + "/review"
+    const SERVER_URL = 'https://reviews-hybrid-app.onrender.com'
+    const CREATE_REVIEW_EP = SERVER_URL + "/review"
+    const GET_REVIEWS_EP = SERVER_URL + "/reviews"
+    const DELETE_REVIEW_EP = SERVER_URL + "/review"
 
 
     $("#btnReview").on("click", loadReviewData);
@@ -58,6 +58,10 @@ function onDeviceReady() {
     function postApi(url, onSuccessFunc, data) {
         fetch(url, {
             method: 'POST',
+            headers: {
+                'Access-Control-Allow-Origin': SERVER_URL,
+                'origin': SERVER_URL
+            },
             body: data
         })
             .then(response => response.json())
@@ -154,11 +158,18 @@ function onDeviceReady() {
         if(localData && localData.length > 0)
             display('tblReviews',localData);
 
-        $.get(GET_REVIEWS_EP, function (data) {
-            localStorage.setItem("localReviews", JSON.stringify(data));
-            if(!localData || data.length > localData.length)
-                display('tblReviews', data);
-        });
+        $.ajax({
+            url: GET_REVIEWS_EP, 
+            method: 'GET',
+            headers: {
+                'Access-Control-Allow-Origin': SERVER_URL,
+                'origin': SERVER_URL
+            },
+            success: function (data) {
+                localStorage.setItem("localReviews", JSON.stringify(data));
+                if(!localData || data.length != localData.length)
+                    display('tblReviews', data);
+            }});
     }
 
     // Handle the "Delete Cloud Data" button click
@@ -175,6 +186,10 @@ function onDeviceReady() {
             type: "DELETE",
             contentType: 'application/json',
             data: JSON.stringify(reviewJson),
+            headers: {
+                'Access-Control-Allow-Origin': SERVER_URL,
+                'origin': SERVER_URL
+            },
             success: function () {
                 localStorage.removeItem('localReviews');
                 viewReviews()
