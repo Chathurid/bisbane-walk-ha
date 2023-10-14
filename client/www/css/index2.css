@@ -1,0 +1,8 @@
+/* Override jQuery Mobile's text-transform for buttons and other elements */
+.ui-btn,
+.ui-btn-up-a,
+.ui-header .ui-title,
+.ui-content,
+.ui-footer{
+  text-transform: none;
+}

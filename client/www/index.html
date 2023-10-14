@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta charset="utf-8">
+
+    <!--<meta http-equiv="Content-Security-Policy" content="default-src 'self' data: https://ssl.gstatic.com 'unsafe-eval'; 
+		style-src 'self' 'unsafe-inline'; 
+		media-src *; img-src 'self' data: content:;">-->
+
+    <meta name="format-detection" content="telephone=no">
+    <meta name="msapplication-tap-highlight" content="no">
+    <meta name="viewport" content="initial-scale=1, width=device-width, viewport-fit=cover">
+    <meta name="color-scheme" content="light dark">
+    <link rel="stylesheet" href="css/index.css">
+
+    <link rel="stylesheet" href="css\jquery.mobile-1.4.5.css" />
+    <link rel="stylesheet" href="css\index2.css" />
+    <script src="js\jquery.js"></script>
+    <script src="js\jquery.mobile-1.4.5.js"></script>
+    <script src="js\index.js"></script>
+    <script src="cordova.js"></script>
+
+    <title>Brisbane Walker</title>
+
+</head>
+
+<body>
+
+    <!--First Page-->
+    <div data-role="page" id="home">
+        <div data-role="header" data-theme="a" style="background-color: rgb(38, 84, 110);">
+            <h1 style="color: white;">BRISBANE WALKER</h1>
+        </div><!--/header-->
+
+        <!--Setting background image-->
+        <div class="cpntainer" data-role="content">
+            <img src="img/home2.jpg" alt="home" style=width:100%; height: 30%;">
+
+
+            <!--Viewv Places button-->
+            <p><a href="#viewPlaces" style="text-decoration:none">
+                    <button id="places" style="width:80%; margin-left: 10%; margin-right: 10%; background-color: rgb(38, 84, 110); color: white; 
+                font-weight: normal; text-align: center;">View Places</button></a></p>
+
+            <!--Add A Review button-->
+            <p><a href="#reviewPage" style="text-decoration:none"><button id="review" style="width:80%; margin-left: 10%; margin-right: 10%; background-color: rgb(38, 84, 110); color: white;
+         font-weight: normal; text-align: center;">Add a Review</button></a></p>
+
+            <!--In-App Browser button-->
+            <p><a href="#inAppB" style="text-decoration:none">
+                    <button id="openBrowserButton" style="width:80%; margin-left: 10%; margin-right: 10%; background-color: rgb(38, 84, 110); color: white;
+                font-weight: normal; text-align: center;">Search Places</button></a></p>
+        </div>
+
+        <div data-role="footer" data-position="fixed" data-theme="a" style="background-color: rgb(38, 84, 110);">
+            <h4 style="color: white; font-weight: normal;">Created by GRP1 | all rights reserved </h4>
+        </div><!--/footer-->
+    </div><!--End first page-->
+
+
+    <!--Second Page / View Places pages-->
+    <div data-role="page" id="viewPlaces">
+        <div data-role="header" data-theme="a" style="background-color: rgb(38, 84, 110);">
+            <h1 style="color: white;">BRISBANE WALKER</h1>
+            <a href="#home" data-icon="home" data-rel="home">Home</a>
+            <a href="#myReviews" data-role="button" data-inline="true" class="ui-btn-right" data-mini="true"
+                id="myReviews" style="margin-right: auto" data-position="right">My Reviews</a>
+        </div>
+
+        <div data-role="content">
+            <h1 style="font-weight: bold;">Cloud Data</h1>
+
+            <form>
+                <p><input type="search" name="search" id="search" value="" style="border:2px solid rgb(38, 84, 110);"
+                        placeholder="Type name of the place here">
+                </p>
+            </form>
+
+            <h4 id="noDataCloud">No Data</h4>
+            <table data-role="table" id="rTableCloud" data-mode="reflow" class="ui-responsive ui-shadow table-stroke"
+                style="display: none;">
+                <thead>
+                    <tr>
+                        <th data-priority="1">Photo</th>
+                        <th data-priority="2">Name</th>
+                        <th data-priority="3">Place/th>
+                        <th data-priority="4">Comment</th>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+
+
+        <div data-role="footer" data-position="fixed" data-theme="a" style="background-color: rgb(38, 84, 110);">
+            <h4 style="color: white; font-weight: normal;">Created by GRP1 | all rights reserved </h4>
+        </div><!--/footer-->
+    </div><!--End second page-->
+
+
+    <!--Third Page / Add a Review page-->
+    <div data-role="page" id="reviewPage">
+        <div data-role="header" data-theme="a" style="background-color: rgb(38, 84, 110);">
+            <h1 style="color: white;">BRISBANE WALKER</h1>
+            <a href="#home" data-icon="home" data-rel="home">Home</a>
+        </div>
+
+        <div data-role="content">
+            <h1 style="font-weight: bold;">Review</h1>
+
+            <div class="cam">
+                <div id="photo"></div>
+
+                <p><button id="btn" class="ui-btn ui-corner-all ui-btn-icon-left ui-icon-camera" id="btn"
+                        style="text-align: center; font-weight: none; background-color: rgb(38, 84, 110); color: white;">Camera</button>
+                </p>
+                <!-- <a href="#camera" data-role="button" data-inline="true"
+                class="ui-btn ui-corner-all ui-btn-icon-left ui-icon-camera" data-mini="true" id="btn"
+                style="margin-left: 30%; margin-right: 30%;  margin-top: 10%; font-weight: none; background-color: rgb(38, 84, 110); color: white;">
+                Camera</a>-->
+                <p id="msg"></p>
+            </div>
+
+            <form>
+                <div>
+                <lable style="font-size: 20px;">Name:</lable>
+                <input type="text" value="" placeholder="Enter your name here"
+                    style="border:2px solid rgb(38, 84, 110);">
+                </div>
+                <div>
+                <lable style="font-size: 20px;">Place:</lable>
+                <input type="text" value="" id="place" data-inline="true" placeholder="Name of the place"
+                    style="border:2px solid rgb(38, 84, 110);">
+                    <button id="location" data-inline="true" style="width:40%; text-align: center; background-color: rgb(38, 84, 110); color: white;">Location</button>
+                </div>
+                <div>                    
+                <lable style="font-size: 20px;">Comment:</lable>
+                <textarea cols="40" rows="8" name="textarea" id="textarea" value="" placeholder="Add your comment here"
+                    style="border:2px solid rgb(38, 84, 110);"></textarea>
+                </div>
+                <p><button id="post" style="width:40%; text-align: center; margin-left: 30%; margin-right: 3%; background-color: rgb(38, 84, 110); color: white; 
+                        font-weight: normal;;">Post</button></p>
+            </form>
+
+        </div>
+
+        <div data-role="footer" data-position="fixed" data-theme="a" style="background-color: rgb(38, 84, 110);">
+            <h4 style="color: white; font-weight: normal;">Created by GRP1 | all rights reserved </h4>
+        </div><!--/footer-->
+    </div><!--End third page-->
+
+
+    <!--Fourth page / Location page-->
+    <div data-role="page" id="location" data-url="map-page">
+        <div data-role="header" data-theme="a" style="background-color: rgb(38, 84, 110);">
+            <h1 style="color: white;">BRISBANE WALKER</h1>
+            <a href="#home" data-icon="home" data-rel="home">Home</a>
+        </div>
+        <div data-role="content">
+            <h1 style="font-weight:bold;">Location</h1>
+            <div role="main" class="ui-content" id="map-canvas">
+                <!-- map loads here... -->
+            </div>
+        </div>
+
+
+        <div data-role="footer" data-position="fixed" data-theme="a" style="background-color: rgb(38, 84, 110);">
+            <h4 style="color: white; font-weight: normal;">Created by GRP1 | all rights reserved </h4>
+        </div><!--/footer-->
+    </div><!--End fourth page-->
+
+    <!--Fifth page / My Reviews pages-->
+    <div data-role="page" id="myReviews">
+        <div data-role="header" data-theme="a" style="background-color: rgb(38, 84, 110);">
+            <h1 style="color: white;">BRISBANE WALKER</h1>
+            <a href="#home" data-icon="home" data-rel="home">Home</a>
+        </div>
+
+        <!--Page content-->
+        <div id="container">
+            <h1 style="font-weight: bold;">My Reviews</h1>
+            <h4 id="noDataLocal">No Data</h4>
+            <table data-role="table" id="rTableLocal" data-mode="reflow" class="ui-responsive ui-shadow table-stroke"
+                style="display: none;">
+                <thead>
+                    <tr>
+                        <th data-priority="1">Photo</th>
+                        <th data-priority="2">Name</th>
+                        <th data-priority="3">Place</th>
+                        <th data-priority="4">Comment</th>
+                        <th data-priority="5">Clear</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                </tbody>
+            </table>
+        </div>
+
+
+        <div data-role="footer" data-position="fixed" data-theme="a" style="background-color: rgb(38, 84, 110);">
+            <h4 style="color: white; font-weight: normal;">Created by GRP1 | all rights reserved </h4>
+        </div><!--/footer-->
+    </div><!--End fifth page-->
+
+
+</body>
+
+</html>
