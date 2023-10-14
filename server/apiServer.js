@@ -30,7 +30,7 @@ client.connect(err => {
 
 app.get('/', (req, res) => {
 	//res.send('Hello From Root!')
-})
+});
 
 app.delete('/review', (req, res) => {
 
@@ -44,7 +44,7 @@ app.delete('/review', (req, res) => {
 		}// end
 
 	});
-})
+});
 
 app.delete('/reviews', (req, res) => {
 
@@ -58,7 +58,7 @@ app.delete('/reviews', (req, res) => {
 		}// end
 
 	});
-})
+});
 
 app.get('/reviews', function (req, res) {
 	console.log(" In getCloudData");
@@ -86,8 +86,8 @@ app.post('/review', upload.none(), (req, res) => {
 		}// end
 
 	});
-})
+});
 
 app.listen(port, () => {
 	console.log(`Example app listening at http://localhost:${port}`)
-})
+});

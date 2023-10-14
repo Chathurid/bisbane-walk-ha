@@ -3,34 +3,35 @@ document.addEventListener('deviceready', onDeviceReady, false);
 function onDeviceReady() {
     let dataArray = [];
 
-    const baseURL = 'http://localhost'
-    const serverPort = 3000;
-    const clientPort = 8000;
+    const BASE_URL = 'http://localhost'
+    const SERVER_PORT = 3000;
 
-    const createReviewEp = baseURL + ":" + serverPort + "/review"
-    const getReviewsEp = baseURL + ":" + serverPort + "/reviews"
-    const deleteReviewEp = baseURL + ":" + serverPort + "/review"
+    const CREATE_REVIEW_EP = BASE_URL + ":" + SERVER_PORT + "/review"
+    const GET_REVIEWS_EP = BASE_URL + ":" + SERVER_PORT + "/reviews"
+    const DELETE_REVIEW_EP = BASE_URL + ":" + SERVER_PORT + "/review"
 
 
     $("#btnReview").on("click", loadReviewData);
     $("#btnCamera").on("click", takePhoto);
     $("#btnUpdateLocation").on("click", updateLocation);
     $("#btnSaveReview").on("click", postReview);
+    $("#btnReview").on("click", onReviewPageLoad);
+    $("#tblReviews").on("click", ".btnDeleteReview", deleteReview);
+    $("#btnPlaces").on("click", viewReviews);
     $("#btnOpenBrowser").on("click", openBrowser);
 
+    
 
     function takePhoto() {
         var options = {
-            quality: 80,
-            destinationType: Camera.DestinationType.FILE_URI,
+            quality: 50,
+            destinationType: Camera.DestinationType.DATA_URL,
             sourceType: Camera.PictureSourceType.CAMERA,
             encodingType: Camera.EncodingType.JPEG,
             mediaType: Camera.MediaType.PICTURE,
-            cameraDirection: Camera.Direction.BACK,
             targetWidth: 300,
             targetHeight: 400,
-            allowEdit: true,
-            correctOrientation: true,
+            saveToPhotoAlbum: true
         };
 
         navigator.camera.getPicture(onSuccess, onFail, options);
@@ -55,13 +56,13 @@ function onDeviceReady() {
     }
 
     function postApi(url, onSuccessFunc, data) {
-        fetch(url,{
+        fetch(url, {
             method: 'POST',
             body: data
         })
-        .then(response => response.json())
-        .then(data => onSuccessFunc(data))
-        .catch(error => console.error('Error:', error));
+            .then(response => response.json())
+            .then(data => onSuccessFunc(data))
+            .catch(error => console.error('Error:', error));
     }
 
     function clearCache() {
@@ -107,43 +108,32 @@ function onDeviceReady() {
         console.log('Reading the geo-location was succesfull');
     }
 
-    // Handle the "Delete Local Data" button click
-    $("#deleteLData").on("click", function () {
-        // code to delete local data here
-        localStorage.clear();
-        dataArray = [];
-        // alert("Local data deleted!");
-        $("#adminMenu").popup("close");
-    });
-
-    // Handle the "Delete Cloud Data" button click
-    $("#deleteCData").on("click", function () {
-        // code to delete cloud data here
-        $.ajax({
-            url: baseURL + ":" + serverPort + "/delData",
-            type: "DELETE",
-            success: function () {
-                $("#adminMenu").popup("close");
-            },
-            error: function () {
-                $("#adminMenu").popup("close");
-            }
-        });
-
-    });
-
-    function display(tableName, placeData) {
+    function display(tableName, reviews) {
         var tableBody = $('#' + tableName + ' tbody');
         tableBody.empty();
-        booksData.forEach(function (place) {
-            var newRow = $('<tr>');
-            newRow.append('<td><b class="ui-table-cell-label">Photo</b><img style=\"height:50%;width:30%;\" src=\"img/' + place.a + '\"></td>');
-            newRow.append('<td><b class="ui-table-cell-label">Name</b>' + book.bookID + '</td>');
-            newRow.append('<td><b class="ui-table-cell-label">Place</b>' + book.bookName + '</td>');
-            newRow.append('<td><b class="ui-table-cell-label">Comment</b>' + book.author + '</td>');
+        reviews.forEach(function (reviewJson) {
+            var newRow = $('<tr data=\"' + reviewJson.personName + '|' + reviewJson.location + '\">');
+            newRow.append('<td><b class="ui-table-cell-label">Photo</b><img style=\"height:50%;width:30%;\" src=\"' + reviewJson.photo + '\"></td>');
+            newRow.append('<td><b class="ui-table-cell-label">Name</b>' + reviewJson.personName + '</td>');
+            newRow.append('<td><b class="ui-table-cell-label">Place</b>' + reviewJson.location + '</td>');
+            newRow.append('<td><b class="ui-table-cell-label">Comment</b>' + reviewJson.review + '</td>');
+            newRow.append('<td><button class=\"btnDeleteReview\">Delete</button></td>');
 
             tableBody.append(newRow);
         });
+
+        activateTable(reviews, tableName);
+    }
+
+    function activateTable(reviews, tableName) {
+        if (reviews.length > 0) {
+            $('#noReviews').hide();
+            $('#' + tableName).show();
+        }
+        else {
+            $('#noReviews').show();
+            $('#' + tableName).hide();
+        }
     }
 
     function loadReviewData() {
@@ -153,6 +143,48 @@ function onDeviceReady() {
 
     function updateLocation() {
         navigator.geolocation.getCurrentPosition(updatePosition);
+    }
+
+    function onReviewPageLoad() {
+        screen.orientation.onchange = takePhoto;
+    }
+
+    function viewReviews() {        
+        var localData = JSON.parse(localStorage.getItem("localReviews"));
+        if(localData && localData.length > 0)
+            display('tblReviews',localData);
+
+        $.get(GET_REVIEWS_EP, function (data) {
+            localStorage.setItem("localReviews", JSON.stringify(data));
+            if(!localData || data.length > localData.length)
+                display('tblReviews', data);
+        });
+    }
+
+    // Handle the "Delete Cloud Data" button click
+    function deleteReview() {
+        var tableRow = $(this).parent().parent();
+        var values = tableRow.attr("data").toString().split('|');
+        var reviewJson = {
+            "personName": values[0],
+            "location": values[1]
+        };
+        // code to delete cloud data here
+        $.ajax({
+            url: DELETE_REVIEW_EP,
+            type: "DELETE",
+            contentType: 'application/json',
+            data: JSON.stringify(reviewJson),
+            success: function () {
+                localStorage.removeItem('localReviews');
+                viewReviews()
+                console.log("Review by " + values[0] + " deleted.");
+            },
+            error: function () {
+                console.log("Review by " + values[0] + " delete failed.");
+            }
+        });
+
     }
 
     function postReview() {
@@ -178,13 +210,15 @@ function onDeviceReady() {
         }
         formData.append("jsonData", JSON.stringify(data));
 
-        postApi(createReviewEp, function (d) {
+        postApi(CREATE_REVIEW_EP, function (d) {
             console.log('Created a review');
+            window.location.href = '#home';
+
+            // clear text boxes
+            clearCache();
+            screen.orientation.onchange = function(){};
         }, formData);
 
-        // clear text boxes
-        clearCache();
-        window.location.href = '#home';
     }
 
     function openBrowser(e) {
@@ -206,5 +240,25 @@ function onDeviceReady() {
         });
 
     }
+
+    // Initialize the admin menu as a popup
+    $("#adminMenu").popup();
+
+    // Handle clicks on the admin button to open the menu
+    $("#adminMenuBtn").on("click", function () {
+        $("#adminMenu").popup("open", {
+            positionTo: "#adminMenuBtn",
+            transition: "pop"
+        });
+    });
+
+    // Handle the "Delete Local Data" button click
+    $("#deleteLData").on("click", function () {
+        // code to delete local data here
+        localStorage.clear();
+        dataArray = [];
+        // alert("Local data deleted!");
+        $("#adminMenu").popup("close");
+    });
 
 } //end onDeviceReady

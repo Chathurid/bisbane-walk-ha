@@ -9,10 +9,10 @@
     <meta name="msapplication-tap-highlight" content="no">
     <meta name="viewport" content="initial-scale=1, width=device-width, viewport-fit=cover">
     <meta name="color-scheme" content="light dark">
-    <link rel="stylesheet" href="css/index.css" >
+    <link rel="stylesheet" href="css/index.css">
 
-    <link rel="stylesheet" href="css\jquery.mobile-1.4.5.css" >
-    <link rel="stylesheet" href="css\index2.css" >
+    <link rel="stylesheet" href="css\jquery.mobile-1.4.5.css">
+    <link rel="stylesheet" href="css\index2.css">
 
     <script src="js\jquery.js"></script>
     <script src="js\jquery.mobile-1.4.5.js"></script>
@@ -31,7 +31,6 @@
             <h1 style="color: white;">BRISBANE WALKER</h1>
         </div><!--/header-->
 
-        <!--Setting background image-->
         <div class="container" data-role="content">
             <img src="img/home2.jpg" alt="home" style="width:100%; height: 30%;">
 
@@ -81,13 +80,8 @@
         <div data-role="content">
             <h1 style="font-weight: bold;">Places</h1>
 
-            <div>
-                <input type="search" name="search" id="search" value="" style="border:2px solid rgb(38, 84, 110);"
-                    placeholder="Type name of the place here">
-            </div>
-
-            <h4 id="noDataCloud">No Data</h4>
-            <table data-role="table" id="rTableCloud" data-mode="reflow" class="ui-responsive ui-shadow table-stroke"
+            <h4 id="noReviews">No Data</h4>
+            <table data-role="table" id="tblReviews" data-mode="reflow" class="ui-responsive ui-shadow table-stroke"
                 style="display: none;">
                 <thead>
                     <tr>
@@ -114,6 +108,8 @@
         <div data-role="header" data-theme="a" style="background-color: rgb(38, 84, 110);">
             <h1 style="color: white;">BRISBANE WALKER</h1>
             <a href="#home" data-icon="home" data-rel="home">Home</a>
+            <a href="#myReviews" data-role="button" data-inline="true" class="ui-btn-right" data-mini="true"
+                id="adminMenuBtn" style="margin-right: auto" data-position="right">My Reviews</a>
         </div>
 
         <div data-role="content">
@@ -124,10 +120,7 @@
 
                 <button id="btnCamera" class="ui-btn ui-corner-all ui-btn-icon-left ui-icon-camera"
                     style="text-align: center; font-weight: none; background-color: rgb(38, 84, 110); color: white;">Camera</button>
-                <!-- <a href="#camera" data-role="button" data-inline="true"
-                class="ui-btn ui-corner-all ui-btn-icon-left ui-icon-camera" data-mini="true" id="btn"
-                style="margin-left: 30%; margin-right: 30%;  margin-top: 10%; font-weight: none; background-color: rgb(38, 84, 110); color: white;">
-                Camera</a>-->
+
                 <p id="msg"></p>
             </div>
 
@@ -140,14 +133,13 @@
                     style="border:2px solid rgb(38, 84, 110);" />
                 <textarea id="txtCoordinates" disabled="disabled" cols="40" rows="8" data-inline="true"
                     style="border:2px solid rgb(38, 84, 110);height: auto;"></textarea>
-                <button id="btnUpdateLocation" data-inline="true"
-                    style="width:40%; text-align: center; background-color: rgb(38, 84, 110); color: white;float: right;">
+                <button id="btnUpdateLocation" style="width:20%; text-align: center; background-color: rgb(38, 84, 110); color: white;float: left;">
                     Update Location
                 </button>
             </div>
             <div>
                 <div>
-                    <label data-inline="true" style="font-size: 20px;">Comment:</label>
+                    <label style="margin-top: 8% ;font-size: 20px;">Comment:</label>
                     <textarea id="txtReview" cols="40" rows="8" name="textarea" value=""
                         placeholder="Add your comment here" style="border:2px solid rgb(38, 84, 110);"></textarea>
                 </div>
@@ -158,6 +150,49 @@
                 </button>
             </div>
         </div>
+        <div data-role="footer" data-position="fixed" data-theme="a" style="background-color: rgb(38, 84, 110);">
+            <h4 style="color: white; font-weight: normal;">Created by GRP1 | all rights reserved </h4>
+        </div><!--/footer-->
+    </div>
+
+    <!--Fourth page / Mr Reviews-->
+    <div data-role="page" id="myReviews">
+        <div data-role="header" data-theme="a" style="background-color: rgb(38, 84, 110);">
+            <h1 style="color: white;">BRISBANE WALKER</h1>
+            <a href="#home" data-icon="home" data-rel="home">Home</a>
+            <a href="#" data-role="button" data-inline="true" class="ui-btn-right" data-mini="true" id="adminMenuBtn"
+                style="margin-right: auto" data-position="right">Admin</a>
+            <div data-role="popup" id="adminMenu" data-theme="a">
+                <ul data-role="listview" data-inset="true" style="min-width:210px;">
+                    <li><a href="#" id="deleteLData" class="ui-btn">Delete Local Data</a></li>
+                </ul>
+            </div>
+
+        </div>
+
+        <!--Page content-->
+        <div id="container">
+            <h1 style="font-weight: bold;">My Reviews</h1>
+            <h4 id="noDataLocal">No Data</h4>
+            <table data-role="table" id="tblReviews" data-mode="reflow" class="ui-responsive ui-shadow table-stroke"
+                style="display: none;">
+                <thead>
+                    <tr>
+                        <th data-priority="1">Photo</th>
+                        <th data-priority="2">Name</th>
+                        <th data-priority="3">Place</th>
+                        <th data-priority="4">Comment</th>
+                        <th data-priority="5"></th>
+
+                    </tr>
+                </thead>
+                <tbody>
+
+                </tbody>
+            </table>
+        </div>
+
+
         <div data-role="footer" data-position="fixed" data-theme="a" style="background-color: rgb(38, 84, 110);">
             <h4 style="color: white; font-weight: normal;">Created by GRP1 | all rights reserved </h4>
         </div><!--/footer-->
